@@ -1,109 +1,42 @@
 # Advertising Campaign Performance Dashboard
 
-An end-to-end analysis of paid-search advertising performance using Python, SQL, MySQL, and Tableau. The project evaluates campaign profitability, compares engagement and conversion efficiency, and identifies opportunities for controlled budget optimization.
+A portfolio analytics project investigating which paid-search ad groups return advertising spend and where controlled optimization experiments may help. Built for ads and sponsorships analyst applications; this retail paid-search dataset does not measure sponsorship or game advertising performance.
 
-**[Explore the interactive Tableau dashboard](https://public.tableau.com/app/profile/nikhita.karthikesan/viz/AdvertisingCampaignAnalytics_17927052239570/Dashboard1)**
+**Current status:** Python validation, MySQL reporting scripts, Tableau CSV exports, and analysis are complete locally. Live MySQL 9.4.0 imports, SQL queries, reporting views, and KPI reconciliation are verified; the Tableau workbook/publication remains pending. See [progress](reports/progress.md).
 
-## Business question
+## Verified findings
 
-Which ad groups generate the strongest returns, which underperform, and where should a business investigate changes to its advertising budget?
+Across 190 observations, 40 ad groups, and five months: spend **635,372**, revenue **561,960**, advertising loss **73,412**, CTR **34.56%**, conversion rate **10.38%**, and ROAS **0.884×**. October alone was profitable. The highest group profit came from a group spending only 44, so it is weak evidence for scaling. See [business insights](reports/business_insights.md) for campaign comparisons and limitations.
 
-## Results at a glance
+## Source and definitions
 
-The dataset covers **190 ad-group/month observations**, **40 ad groups**, and **July–November 2021**.
+[Kaggle: Shopping Mall Paid Search Campaign Dataset](https://www.kaggle.com/datasets/marceaxl82/shopping-mall-paid-search-campaign-dataset). 
 
-| Metric | Result |
-|---|---:|
-| Impressions | 2,674,699 |
-| Clicks | 924,503 |
-| Conversions | 95,996 |
-| Advertising spend | 635,372 |
-| Revenue | 561,960 |
-| Advertising profit / loss | −73,412 |
-| Click-through rate | 34.56% |
-| Conversion rate | 10.38% |
-| Cost per acquisition | 6.62 |
-| Return on ad spend | 0.884× |
+The [source author's sharing post](https://www.reddit.com/r/datascienceproject/comments/xtjliu) describes a real anonymized US shopping-mall paid-search campaign in 2021. The raw file has month names but no year; the existing notebook assigns 2021, consistent with that post. The Kaggle page's primary dictionary was not retrievable during this work.
 
-Monetary values use source currency units. Profit means revenue minus advertising cost, excluding overhead and other business costs.
+Revenue and sale_amount remain separate. The project interprets revenue as commission income and sale_amount as underlying sales, but this interpretation and currency require primary dictionary confirmation. ROAS always uses the source Revenue field, never Sale Amount. Profit means revenue less advertising cost, before overhead. Check source licensing before redistributing data.
 
-- **Overall advertising was unprofitable:** revenue fell short of spend by 73,412.
-- **October was the only profitable month:** profit was 1,047, with ROAS of 1.013×.
-- **The largest-loss group lost 15,022:** `Shop - 1:1 - Mob - [shop coupon]` had high CTR but below-average conversion rate, making tracking and search-intent alignment useful areas to investigate.
-- **High ROAS does not establish scalability:** the highest-profit group earned 116 on just 44 spend and 24 conversions. Its small seasonal sample does not justify a large budget increase.
+## Workflow and model
 
-Read the [business analysis](reports/business_insights.md) for campaign comparisons, recommendations, and limitations.
+Python, pandas, NumPy, MySQL 8, SQL, Jupyter, and prepared Tableau Public inputs. Original work remains in `notebooks/data_cleaning.ipynb`; it reads the 12-column raw CSV, retains source ratios, recalculates metrics, and creates the 19-column cleaned CSV. `scripts/reporting.py` independently reconstructs that logic and compares every field. The notebook assumes its working directory is notebooks/; the scripts work from any directory.
 
-## Dashboard
+The reporting model is one fact table, `advertising_analytics.campaign_performance`, at ad-group/month grain. Primary key: `(ad_group, reporting_month)`; binary text collation preserves exact source names. Text uses VARCHAR, month uses DATE, counts use BIGINT UNSIGNED, and monetary/ratio fields use DECIMAL. Undefined ratios permit NULL. Dates represent month starts. The 190 observations cover 190 of 200 possible combinations; absent combinations are not fabricated zeros. Two aggregate views expose month and ad-group grains, and one detail view supports exports.
 
-The Tableau dashboard includes six KPI cards, monthly spend and revenue, monthly ROAS, profitable and loss-making ad-group rankings, an engagement/conversion scatter plot, and a volume-screened ROAS comparison.
-
-Reporting-period and ad-group filters update the charts and weighted KPIs. Profit is green and loss is red, with signed values retained. The business insights section explicitly describes the full period and remains static when filters change.
-
-All interactive sheets use the campaign-month detail export. The ROAS comparison includes only groups with at least 1,000 spend **within the active selection**; this is an analytical screen, not a statistical confidence threshold. Missing ad-group/month combinations are not filled with invented zeros.
-
-See the [Tableau implementation guide](tableau/dashboard_build_guide.md) for formulas and validation examples. The published dashboard uses CSV-based data and does not require access to the local MySQL server.
-
-## Data source and quality
-
-Source: [Shopping Mall Paid Search Campaign Dataset on Kaggle](https://www.kaggle.com/datasets/marceaxl82/shopping-mall-paid-search-campaign-dataset).
-
-The raw file contains 190 rows and 12 columns. Cleaning preserves supplied KPIs under `source_*` names and recalculates reporting metrics from the underlying counts and amounts. The resulting dataset contains 19 columns.
-
-Validation confirms unique ad-group/month keys, valid reporting dates, nonnegative counts/cost/revenue, and clicks no greater than impressions. Seven observations have zero conversions, so CPA is undefined and retained as NULL.
-
-Supplied ratios differ from recalculated metrics: maximum absolute differences are 0.005 for CTR, 0.25 for conversion rate, 0.286667 for CPC, and 0.499 for profit/loss. Reporting consistently uses recalculated metrics.
-
-Revenue and Sale Amount are distinct fields; ROAS uses **Revenue**. Revenue's commission-income interpretation and the currency have not been independently confirmed against a primary data dictionary. The raw file supplies month names without a year; 2021 is consistent with the [dataset author's description](https://www.reddit.com/r/datascienceproject/comments/xtjliu). Dataset licensing and redistribution terms remain governed by the original source; no independent dataset license is asserted here.
-
-## Architecture
-
-```text
-Raw CSV → Python cleaning notebook → Validated campaign-month CSV
-                                      ├── MySQL fact table → SQL reporting views
-                                      └── Tableau exports → Tableau Public dashboard
-```
-
-**Tools:** Python, pandas, NumPy, Jupyter, MySQL, SQL, Tableau Public.
-
-The database contains one fact table, `advertising_analytics.campaign_performance`, at ad-group/month grain. Its composite primary key is `(ad_group, reporting_month)`. Counts use integers, monetary amounts and ratios use DECIMAL, and reporting months use DATE. Undefined ratios permit NULL.
-
-Three views expose monthly KPIs, ad-group KPIs, and campaign-month detail. SQL analysis uses weighted aggregation, `NULLIF`, `RANK`, and `LAG` for rankings and monthly comparisons. SQL targets MySQL 8.0.16+ and was executed and verified on **MySQL 9.4.0**; an 8.x server was not separately tested.
-
-## KPI definitions
-
-| KPI | Calculation |
+| KPI | Definition |
 |---|---|
+| Impressions, clicks, conversions, spend, revenue | SUM of corresponding raw measure |
 | CTR | SUM(clicks) / SUM(impressions) |
 | Conversion rate | SUM(conversions) / SUM(clicks) |
 | CPC | SUM(cost) / SUM(clicks) |
 | CPA | SUM(cost) / SUM(conversions) |
 | ROAS | SUM(revenue) / SUM(cost) |
-| Advertising profit / loss | SUM(revenue) − SUM(cost) |
+| Ad profit/loss | SUM(revenue) − SUM(cost) |
 
-Rates are displayed as percentages, and ROAS as a multiplier. Ratios are calculated from aggregated totals, never by averaging row-level ratios. Zero denominators produce NULL.
+SQL uses NULLIF for zero denominators. Rates are fractions displayed as percentages; ROAS is a multiplier. Never average row percentages. Seven rows have undefined CPA. Maximum supplied/recalculated differences are 0.005 CTR, 0.25 conversion rate, 0.286667 CPC, and 0.499 profit. Source KPIs are retained for audit only.
 
-## Repository structure
+## Reproduce locally
 
-```text
-data/raw/                         Source CSV
-data/processed/                   Cleaned campaign-month data
-notebooks/data_cleaning.ipynb      Inspection and cleaning workflow
-scripts/reporting.py              Validation and Tableau exports
-scripts/import_mysql.py           Transactional MySQL import
-scripts/verify_mysql.py            Live SQL and KPI verification
-sql/                              Schema, validation, analysis, and views
-tableau/                          Tableau CSVs and implementation guide
-reports/                          Business analysis and validation evidence
-tests/                            Regression tests and independent audit
-PROJECT_AUDIT.md                   Validation scope and results
-```
-
-## Reproduce the analysis
-
-Use Python 3.10+ for a new environment. The recorded validation environment used Python 3.9.6, pandas 2.3.3, and NumPy 2.0.2; a fresh environment has not been separately verified.
-
-From the repository root:
+From the repository root, with Python 3.10+:
 
 ```sh
 python3 -m venv .venv
@@ -113,42 +46,38 @@ python3 -m venv .venv
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The reporting script validates the existing cleaned data against the raw-data transformation and writes:
+Exports: `tableau/tableau_campaign_month.csv` (190 rows), `tableau/tableau_monthly_kpis.csv` (5), and `tableau/tableau_ad_group_kpis.csv` (40). Local checks and totals are recorded in [validation.json](reports/validation.json). CSV floating-point artifacts below a cent can appear in aggregate sale amount; MySQL stores monetary data in fixed-point DECIMAL.
 
-| Export | Grain | Rows |
-|---|---|---:|
-| tableau/tableau_campaign_month.csv | Ad group × reporting month | 190 |
-| tableau/tableau_monthly_kpis.csv | Reporting month | 5 |
-| tableau/tableau_ad_group_kpis.csv | Ad group | 40 |
-
-Do not join these different grains in Tableau: use the detail file for interactive reporting and summary files for reconciliation.
-
-To reproduce the cleaning notebook interactively, install `notebook` and `ipykernel`, then launch Jupyter from `notebooks/` using the project environment. The notebook expects that working directory. Command-line scripts resolve paths relative to the repository.
-
-For an independent audit, including notebook execution in an isolated temporary copy:
+For MySQL 8.0.16+ (CHECK enforcement), execute `sql/01_create_tables.sql` in Workbench with a schema-creation account. Create a separate local account with SELECT/INSERT/UPDATE privileges on this database. Copy `.env.example` to `.env` and set credentials; never commit `.env`. Then run:
 
 ```sh
-.venv/bin/python tests/audit_project.py
+.venv/bin/python scripts/import_mysql.py
 ```
 
-This reconciles 190 detail rows, 45 summary rows, and 200 month/group selections using Decimal arithmetic. Run validation without Python's `-O` option because the current checks use assertions.
+The importer validates CSV first, maps missing ratios to SQL NULL, upserts matching keys in one transaction, checks every stored column against the CSV, and commits only if all 190 rows match. Existing unrelated rows cause rollback rather than deletion. No passwords are embedded. Schema creation and view creation are separate DDL operations, not part of this transaction. Existing incompatible schemas must be reviewed manually; CREATE IF NOT EXISTS does not migrate tables.
 
-### MySQL
+In Workbench run `sql/04_reporting_views.sql`, then `sql/02_data_validation.sql` and `sql/03_kpi_analysis.sql`. Validation expects monthly counts 38/38/38/37/39 and totals matching validation.json. Analysis includes profit/revenue rankings, volume-screened efficiency comparisons, engagement/conversion screening, and LAG month-over-month changes. The default 1,000 spend screen is an explicit analyst choice, not statistical significance.
 
-Follow [MySQL setup](reports/mysql_setup.md) to create a scoped account and configure `.env` from `.env.example`. Credentials stay outside version control.
+No MySQL client/server or connector was available during implementation: dry run passed, but no database import, SQL execution, or view parity has been claimed. After executing on MySQL, retain results in reports/ and reconcile view totals to the exported summaries. Tableau exports are derived directly from the validated CSV and do not depend on a live server.
 
-With the server running and credentials configured:
+## Tableau dashboard
 
-```sh
-.venv/bin/python scripts/verify_mysql.py
-```
+Use the detail CSV for all interactive sheets. Do not join different aggregate grains. The planned dashboard includes six KPI cards, spend vs revenue, monthly ROAS, best/worst groups by profit, a CTR/conversion scatter plot, efficiency comparison, month/group filters, and evidence-based recommendations.
 
-The verifier executes the schema, imports twice, creates views, runs all validation/analytical queries, and compares server results to independent CSV calculations. Alternatively, execute the SQL manually in this order: schema → Python import → reporting views → validation → KPI analysis.
+Follow [build guide and calculated fields](tableau/dashboard_build_guide.md). This includes formatting, layouts, filter/ranking behavior, QA totals, and publication steps using embedded extracts.
 
-The importer upserts matching keys in one transaction, verifies every stored field, and rolls back on a mismatch. It does not delete unrelated records. DDL operations commit independently, and existing incompatible tables require manual schema review.
+Dashboard URL: pending actual Tableau Public publication.
 
-## Validation and limitations
+Screenshots: pending actual workbook creation; add images under images/ after verification.
 
-The [validation summary](PROJECT_AUDIT.md) records the scope and evidence. Live MySQL verification confirmed 190 rows, 40 groups, five months, zero validation exceptions, nine analytical result sets, and 45 matching summary-view rows. Tableau filter behavior was checked through full-period, October-only, single-group, and combined-filter views.
+[Resume bullets](reports/resume_bullets.md) describe verified work without claiming Tableau construction. No GitHub remote was supplied and this folder was not an initialized Git repository; review dataset licensing and staged files before initializing and publishing to your chosen repository.
 
-Only five months of observational data are available, with unequal group coverage and no attribution window, customer lifetime value, or incremental-return measurement. Historical ROAS does not establish how additional budget would perform. Recommendations are candidates for investigation and controlled experiments, not causal conclusions.
+## Audit and notebook reproduction
+
+See [PROJECT_AUDIT.md](PROJECT_AUDIT.md) for tested scope and outstanding work. Run `.venv/bin/python tests/audit_project.py` to execute the notebook code in an isolated copy, independently reconcile Decimal KPIs and all exports, test 200 month/group selections, and write `reports/audit_evidence.json`. It does not connect to MySQL. Run Python without `-O`; current validation uses assertions.
+
+For interactive notebook work, install Jupyter separately (`.venv/bin/python -m pip install notebook ipykernel`), launch `.venv/bin/python -m notebook` from `notebooks/`, and select the project environment. Jupyter is optional for the command-line pipeline. The audited existing environment uses Python 3.9.6; a fresh Python 3.10+ environment and full dependency installation have not been verified here. The existing environment is missing mysql-connector-python and python-dotenv; install requirements before attempting a real import. The account used to create reporting views also needs CREATE VIEW and source-table SELECT privileges.
+
+## Verified local MySQL execution — October 22, 2026
+
+The earlier implementation-time availability notes above are historical. MySQL 9.4.0 is installed and running locally. Both database dependencies are now installed. `scripts/verify_mysql.py` completed successfully: two imports verified all 190 records, all SQL scripts executed, nine analytical result sets returned, all 45 summary-view rows reconciled to independent CSV totals, and seven NULL CPA values were confirmed. See [server evidence](reports/mysql_validation.json) and the latest [audit](PROJECT_AUDIT.md). All three regression tests and pip check pass. MySQL 8.x compatibility and fresh-server initialization have not been separately executed.
