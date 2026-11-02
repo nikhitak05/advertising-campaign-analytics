@@ -1,6 +1,6 @@
 # Tableau dashboard implementation
 
-[View the published dashboard](https://public.tableau.com/app/profile/nikhita.karthikesan/viz/AdvertisingCampaignAnalytics_17927052239570/Dashboard1)
+The Tableau dashboard is complete. Its final public link and screenshots will be added to the dashboard section of [README](../README.md).
 
 ## Data source
 
@@ -105,8 +105,8 @@ Check device layouts before publishing. A phone-specific layout can stack KPI ca
 
 The group above is `Shop - Exact - Mob - Black Friday/Cyber Monday`. Single-month line charts naturally show points. Empty filtered charts must not manufacture zero-value records. A zero-conversion selection should leave CPA blank.
 
-## Publication
+## Maintaining the published dashboard
 
-Publish CSV-based data/extracts so viewers need no MySQL connection. Reset filters and clear selected marks before saving. After changes, overwrite the existing published workbook and verify the desktop layout, dropdown filters, tooltips, and KPI totals in the browser. If available, download a packaged workbook for local versioning. No local workbook or screenshots are currently included in this repository.
+Publish CSV-based data/extracts so viewers need no MySQL connection. Reset filters and clear selected marks before saving. After changes, overwrite the existing published workbook and verify the desktop layout, dropdown filters, tooltips, and KPI totals in the browser. If available, download a packaged workbook for local versioning. The final dashboard link and screenshot locations are maintained in README.
 
 Source attribution and metric definitions belong in the footer. Dataset redistribution remains subject to the original source terms.

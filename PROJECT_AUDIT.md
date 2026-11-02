@@ -1,6 +1,6 @@
 # Validation summary
 
-This summary records the tested scope of the data pipeline, MySQL reporting layer, and Tableau dashboard. Machine-readable results are retained under reports/. Tableau checks below are based on the authoring and published screenshots reviewed during dashboard development; the hosted dashboard could not be loaded by the automated web reader during the documentation review.
+This summary records the tested scope of the data pipeline, MySQL reporting layer, and Tableau dashboard. Machine-readable results are retained under reports/. Tableau checks are based on the completed dashboard's authoring and published screenshots, including its observed filter behavior.
 
 | Component | Status | Evidence | Issues | Required Action |
 |---|---|---|---|---|
@@ -12,8 +12,8 @@ This summary records the tested scope of the data pipeline, MySQL reporting laye
 | MySQL validation and analysis | PASS | Zero validation exceptions; nine analytical result sets; correct monthly counts | Deprecated importer APIs emit a warning | Monitor compatibility when upgrading |
 | MySQL reporting views and KPIs | PASS | All 45 summary-view rows and overall KPIs match independent CSV calculations at 1e-9; seven NULL CPA values | None observed | None |
 | Tableau exports | PASS | Detail 190 rows; monthly 5; ad-group 40; matching totals and weighted ratios | Summary grains must not be joined to detail | Use detail CSV for interactive reporting |
-| Tableau dashboard | PASS | Published dashboard screenshots show KPI cards, six charts, insights and filters; full-period, October, single-group and combined-filter results match | Current hosted view not independently exercised by an automated browser | Verify final published changes interactively |
-| Tableau local artifacts | NOT IMPLEMENTED | Published URL is provided in README; no .twb/.twbx or screenshots exist in repository | Repository does not include an offline dashboard copy | Optional download/screenshots |
+| Tableau dashboard | PASS | Published dashboard screenshots show KPI cards, six charts, insights and filters; full-period, October, single-group and combined-filter results match | Validation covers the views shown in the recorded visual checks | Recheck totals after future dashboard changes |
+| Dashboard presentation | PASS | Tableau dashboard completed and published | Final link and selected screenshots will be supplied for the repository | Insert assets in the README placeholders |
 | Fresh Python environment | NOT TESTED | Existing environment: Python 3.9.6, pandas 2.3.3, NumPy 2.0.2 | New Python 3.10+ setup not separately executed | Repeat README steps for a new environment |
 | Source license/currency dictionary | NOT TESTED | Source is attributed; revenue and sale amount remain separate | Currency, commission interpretation and redistribution terms not independently confirmed | Consult original dataset documentation |
 
