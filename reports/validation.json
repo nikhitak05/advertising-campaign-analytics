@@ -1,0 +1,39 @@
+{
+  "status": "PASS: local CSV and notebook-logic parity; MySQL not executed",
+  "records": 190,
+  "ad_groups": 40,
+  "monthly_records": {
+    "2021-07-01": 38,
+    "2021-08-01": 38,
+    "2021-09-01": 38,
+    "2021-10-01": 37,
+    "2021-11-01": 39
+  },
+  "totals": {
+    "impressions": 2674699.0,
+    "clicks": 924503.0,
+    "conversions": 95996.0,
+    "cost": 635372.0,
+    "revenue": 561960.0,
+    "sale_amount": 12049074.309999999,
+    "ctr": 0.3456474915495164,
+    "conversion_rate": 0.10383524985857266,
+    "cpc": 0.6872579104664884,
+    "cpa": 6.6187341139214135,
+    "roas": 0.8844582386381521,
+    "profit_loss": -73412.0
+  },
+  "undefined_ratios": {
+    "ctr": 0,
+    "conversion_rate": 0,
+    "cpc": 0,
+    "cpa": 7,
+    "roas": 0
+  },
+  "source_max_absolute_differences": {
+    "source_ctr": 0.0050000000000000044,
+    "source_conversion_rate": 0.25,
+    "source_cpc": 0.2866666666666667,
+    "source_profit_loss": 0.4989999999999952
+  }
+}

@@ -1,0 +1,4 @@
+pandas>=2.2,<4
+numpy>=1.26,<3
+mysql-connector-python>=9,<10
+python-dotenv>=1,<2

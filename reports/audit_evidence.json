@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-21",
+  "independent_totals": {
+    "impressions": "2674699",
+    "clicks": "924503",
+    "conversions": "95996",
+    "cost": "635372",
+    "revenue": "561960",
+    "sale_amount": "12049074.31",
+    "ctr": "0.345647491549516412874869284356856603",
+    "conversion_rate": "0.103835249858572660121167805837298527",
+    "cpc": "0.687257910466488480837812316455436056",
+    "cpa": "6.61873411392141339222467602816784033",
+    "roas": "0.884458238638152137645347922162134938",
+    "profit_loss": "-73412"
+  },
+  "summary_rows_checked": 45,
+  "filter_combinations_checked": 200,
+  "detail_rows_checked": 190,
+  "source_and_output_hashes_unchanged": true,
+  "sha256": {
+    "data/.DS_Store": "17383602ae54d9118005d720664d68b04449f360ffd8600efc1cf4800d513f5a",
+    "data/processed/advertising_campaigns_clean.csv": "169bbb4c7d4a65c306e96dd17c11d3165ed9e13f85a9c39ee39d81711c1d1e7e",
+    "data/raw/final_shop_6modata.csv": "e84bc05242b43fd4a0efaa0176a99eae291c97f672e12ecb4b28fa9a7c1f61e5",
+    "notebooks/data_cleaning.ipynb": "7ca1b355d26d98d5461aac7fd65fa548fc941dfb0c5bb7dcdadead11cdd4e5d7",
+    "tableau/tableau_campaign_month.csv": "c40f77ca6af4f51230b190d35d1c012bb4cdfdd69e696d6fb81484850790733f",
+    "tableau/dashboard_build_guide.md": "d679fbfb30eb1b00e6108cbb03b8ff391240c80d7a7314e231a7c7110310ca06",
+    "tableau/tableau_monthly_kpis.csv": "d8008fa912f637677683ee1ac9a8208e12d3429467e01e4f2b5cfd210bd6fede",
+    "tableau/tableau_ad_group_kpis.csv": "38ba8c730674cb1444e12d04083c675f90e50a67ea05d73c6d26fe8c3904a923"
+  }
+}
