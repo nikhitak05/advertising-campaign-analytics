@@ -22,9 +22,9 @@
     "data/.DS_Store": "17383602ae54d9118005d720664d68b04449f360ffd8600efc1cf4800d513f5a",
     "data/processed/advertising_campaigns_clean.csv": "169bbb4c7d4a65c306e96dd17c11d3165ed9e13f85a9c39ee39d81711c1d1e7e",
     "data/raw/final_shop_6modata.csv": "e84bc05242b43fd4a0efaa0176a99eae291c97f672e12ecb4b28fa9a7c1f61e5",
-    "notebooks/data_cleaning.ipynb": "7ca1b355d26d98d5461aac7fd65fa548fc941dfb0c5bb7dcdadead11cdd4e5d7",
+    "notebooks/data_cleaning.ipynb": "db81224b5b6f44eb01b38ad36d6bd0ea7bb15a4e5e909f4429163d4c6408dde2",
     "tableau/tableau_campaign_month.csv": "c40f77ca6af4f51230b190d35d1c012bb4cdfdd69e696d6fb81484850790733f",
-    "tableau/dashboard_build_guide.md": "d679fbfb30eb1b00e6108cbb03b8ff391240c80d7a7314e231a7c7110310ca06",
+    "tableau/dashboard_build_guide.md": "82b9a2cb91e5b4ade838b72897ba94a3878d00bc48f2d4d939e8e7e50e016a02",
     "tableau/tableau_monthly_kpis.csv": "d8008fa912f637677683ee1ac9a8208e12d3429467e01e4f2b5cfd210bd6fede",
     "tableau/tableau_ad_group_kpis.csv": "38ba8c730674cb1444e12d04083c675f90e50a67ea05d73c6d26fe8c3904a923"
   }
